@@ -24,7 +24,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('admin')
-            ->path('admin-dashboard')
+            ->path('admin')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -53,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])->sidebarFullyCollapsibleOnDesktop()
-            ->brandName('Foss Demo');
+            // ->brandName('Foss Demo')
+            ->brandLogo(asset('logo.png'));
     }
 }
