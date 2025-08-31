@@ -18,6 +18,8 @@ use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\RegisterationExporter;
 
 class EventRegisterationResource extends Resource
 {
@@ -87,6 +89,10 @@ class EventRegisterationResource extends Resource
             ])
             ->filters([
                 //
+            ])
+           ->headerActions([
+                ExportAction::make()
+                    ->exporter(RegisterationExporter::class), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
