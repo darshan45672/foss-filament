@@ -1,40 +1,25 @@
 <?php
 
-namespace App\Filament\Admin\Resources;
+namespace App\Filament\Admin\Resources\EventResource\RelationManagers;
 
-use App\Filament\Admin\Resources\EventRegisterationResource\Pages;
-use App\Filament\Admin\Resources\EventRegisterationResource\RelationManagers;
-use App\Models\EventRegisteration;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\Section;
-use Filament\Tables\Actions\ExportAction;
-use App\Filament\Exports\RegisterationExporter;
 
-class EventRegisterationResource extends Resource
+class RegistrationsRelationManager extends RelationManager
 {
-    protected static ?string $model = EventRegisteration::class;
+    protected static string $relationship = 'registrations';
 
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';
-
-    protected static ?string $navigationGroup = 'Registerations';
-
-    public static function getNavigationBadge(): ?string
-{
-    return static::getModel()::count();
-}
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -61,11 +46,12 @@ class EventRegisterationResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('id')
             ->columns([
-                TextColumn::make('event.name')
+               TextColumn::make('event.name')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->sortable(),
@@ -90,33 +76,17 @@ class EventRegisterationResource extends Resource
             ->filters([
                 //
             ])
-           ->headerActions([
-                ExportAction::make()
-                    ->exporter(RegisterationExporter::class), 
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListEventRegisterations::route('/'),
-            'create' => Pages\CreateEventRegisteration::route('/create'),
-            'edit' => Pages\EditEventRegisteration::route('/{record}/edit'),
-        ];
     }
 }

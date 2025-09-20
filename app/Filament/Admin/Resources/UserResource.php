@@ -23,7 +23,7 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationGroup = 'Users';
-    
+
     public static function getNavigationBadge(): ?string
 {
     return static::getModel()::count();
@@ -49,7 +49,7 @@ class UserResource extends Resource
                             TextInput::make('password')->label('Password')->password()->minLength(8)->required(fn($livewire) => $livewire instanceof Pages\CreateUser)
                             ->dehydrateStateUsing(fn($state) => bcrypt($state))->dehydrated(fn($state) => filled($state)),
                             
-                            ])->columnSpan(['default' => 12, 'md' => 8]),
+                        ])->columnSpan(['default' => 12, 'md' => 8]),
                 ]),
             ]);
     }
@@ -92,7 +92,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RegistrationsRelationManager::class,
         ];
     }
 
